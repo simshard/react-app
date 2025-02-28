@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Nomen = () => {
+const Nomen = (props) => {
     return (
         <div>
-            Sim
+          Hello {props.name}
         </div>
     )
 }
