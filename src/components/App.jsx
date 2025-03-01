@@ -3,15 +3,16 @@ import { useState } from 'react';
 import '../App.css';
 
 function App() {
+
   const [todos, setTodos] = useState([
     {
       id: 1,
-      title: 'Finish React Series',
+      title: 'Learn more React',
       isComplete: false,
     },
     {
       id: 2,
-      title: 'Go Grocery',
+      title: 'Argue with Trump',
       isComplete: true,
     },
     {
@@ -21,29 +22,56 @@ function App() {
     },
   ]);
 
+  const [toDoInput, setToDoInput] = useState('');
+  const [idForToDo, setIdForToDo] = useState('4');
+
+  function handleInput(event) {
+    setToDoInput(event.target.value);
+  }
+
+  function addTodo(event) {
+    event.preventDefault();
+    if (toDoInput.trim().length === 0) {
+      return;
+    }
+    const newTodo = {
+      id: idForToDo,
+      title: toDoInput,
+      isComplete: false,
+    };
+    setTodos([...todos, newTodo]);
+    setToDoInput('');
+    setIdForToDo(prevIdForToDo => prevIdForToDo + 1)
+  }
+
+  function deleteToDo(id) {
+      setTodos([...todos].filter(todo => todo.id !== id));
+  }
+
   return (
     <div className="todo-app-container">
       <div className="todo-app">
         <h2>Todo App</h2>
-        
-        <form action="#">
+        <div className='border-b border-gray-400'>
+        <form action="#" onSubmit={addTodo}>
           <input
             type="text"
-            className="todo-input"
+            value={toDoInput}
+            onChange={handleInput}
             placeholder="What do you need to do?"
           />
         </form>
-    <p>&nbsp;</p>
+        </div>
+    
         <ul className="todo-list">
-          {todos.map((todo, index) => (
-            <li className="todo-item-container">
+          {todos.map((todo, id) => (
+            <li className="todo-item-container" key={todo.id}>
               <div className="todo-item">
                 <input type="checkbox" />
                 <span className="todo-item-label">{todo.title}</span>
-                {/* <input type="text" className="todo-item-input" value="Finish React Series" /> */}
               </div>
-              <button className="x-button">
-                {<svg
+              <button type='button' className="x-button" onClick={() => deleteToDo(todo.id)}>
+              <svg
                   className="x-button-icon"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -55,7 +83,7 @@ function App() {
                     strokeWidth={2}
                     d="M6 18L18 6M6 6l12 12"
                   />
-                </svg> /* */}
+                </svg>
               </button>
             </li>
           ))}
