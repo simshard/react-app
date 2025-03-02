@@ -109,7 +109,7 @@ function App() {
         </div>
     
         <ul className="todo-list">
-          {todos.map((todo, index) => (
+          {todos.map(todo => (
             <li className="todo-item-container" key={todo.id}>
               <div className="todo-item">
                 <input type="checkbox" onChange={()=>completeToDo(todo.id)}
