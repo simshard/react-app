@@ -1,5 +1,10 @@
 import React, { useState } from 'react'
-export default
+import PropTypes from 'prop-types';
+
+TodoForm.PropTypes = {
+    addTodo: PropTypes.func.isRequired,
+}
+
 function TodoForm (props){
     const [toDoInput, setToDoInput] = useState('');
 
@@ -30,3 +35,6 @@ function TodoForm (props){
     )
 }
 
+
+
+export default TodoForm;
