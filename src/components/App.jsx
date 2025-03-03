@@ -1,6 +1,9 @@
 import { useState } from 'react';
-// import '../reset.css';
+
 import '../App.css';
+import NowtTodo from './NowtTodo';
+import TodoForm from './TodoForm';
+
 
 function App() {
 
@@ -25,23 +28,21 @@ function App() {
     },
   ]);
 
-  const [toDoInput, setToDoInput] = useState('');
+
   const [idForToDo, setIdForToDo] = useState(4);
 
-  function handleInput(event) {
-    setToDoInput(event.target.value);
-  }
 
-  function addTodo(event) {
-    event.preventDefault();
-    const newTodo = toDoInput.trim().length === 0 ? null : {
+
+  function addTodo(todo) {
+    
+    setTodos([...todos,
+    {
       id: idForToDo,
-      title: toDoInput,
+      title: todo,
       isComplete: false,
-    };
-    setTodos(newTodo ? [...todos, newTodo] : todos);
-    setToDoInput('');
-    setIdForToDo(prevIdForToDo => prevIdForToDo + (newTodo ? 1 : 0))
+    },
+  ]);
+    setIdForToDo(prevIdForToDo => prevIdForToDo +1 );
   }
 
   function completeToDo(id) {
@@ -98,16 +99,11 @@ function App() {
       <div className="todo-app">
         <h2>Todo App</h2>
         <div className='border-b border-gray-400'>
-        <form action="#" onSubmit={addTodo}>
-          <input
-            type="text"
-            value={toDoInput}
-            onChange={handleInput}
-            placeholder="What do you need to do?"
-          />
-        </form>
+        <TodoForm addTodo={addTodo}/>
         </div>
     
+    {todos.length > 0 ? (
+      <>
         <ul className="todo-list">
           {todos.map(todo => (
             <li className="todo-item-container" key={todo.id}>
@@ -176,6 +172,10 @@ function App() {
             <button className="button">Clear completed</button>
           </div>
         </div>
+        </>
+        ) : (
+       <NowtTodo/>
+        )}
       </div>
     </div>
   );
