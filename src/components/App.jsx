@@ -94,6 +94,27 @@ function App() {
     }));
     setTodos(updatedTodos);
   }
+  
+  function remaining() {
+    return todos.filter(todo => !todo.isComplete).length;
+  }
+
+  function clearCompleted() {
+    setTodos([...todos].filter(todo => !todo.isComplete));
+  }
+
+  function completeAllTodos() {
+    const updatedTodos = todos.map(todo => {
+       todo.isComplete =true;
+      return todo;
+    });
+    setTodos(updatedTodos);
+  }
+
+
+
+
+
 
   return (
     <div className="todo-app-container">
@@ -109,7 +130,11 @@ function App() {
             updateTodo={updateTodo}
             deleteToDo={deleteToDo}
             markAsEditing={markAsEditing}
-            cancelEdit={cancelEdit}/>
+            cancelEdit={cancelEdit}
+            remaining={remaining}
+            clearCompleted={clearCompleted}
+            completeAllTodos={completeAllTodos}
+            />
              : <NowtTodo/>}
       </div>
     </div>

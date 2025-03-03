@@ -30,6 +30,7 @@ function TodoForm (props){
             value={toDoInput}
             onChange={handleInput}
             placeholder="do what you need to do "
+            className="todo-input"
           />
         </form>
     )

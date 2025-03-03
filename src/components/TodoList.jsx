@@ -1,5 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import TodoItemsRemaining from './TodoItemsRemaining';
+import TodoClearCompleted from './TodoClearCompleted';
+import CompleteAllTodos from './CompleteAllTodos';
 
 TodoList.PropTypes = {
     todos: PropTypes.array.isRequired,
@@ -8,6 +11,9 @@ TodoList.PropTypes = {
     updateTodo: PropTypes.func.isRequired,
     cancelEdit: PropTypes.func.isRequired,
     deleteTodo: PropTypes.func.isRequired,
+    remaining: PropTypes.func.isRequired,
+    clearCompleted: PropTypes.func.isRequired,
+    completeAllTodos: PropTypes.func.isRequired,
 };
 
 function TodoList(props){
@@ -62,23 +68,21 @@ function TodoList(props){
         </ul>
 
         <div className="check-all-container mt-6 p-4">
-          <div>
-            <div className="button">Check All</div>
-          </div>
+        <CompleteAllTodos completeAllTodos={props.completeAllTodos}/>
 
-          <span>3 items remaining</span>
+          <TodoItemsRemaining remaining={props.remaining}/>
         </div>
 
-        <div className="other-buttons-container bg-gray-400 mt-8 p-4">
-          <div>
-            <button className="button filter-button filter-button-active">
+        <div className="other-buttons-container bg-gray-300 mt-8 p-4">
+          <div className='flex space-x-1'>
+            <button className="button filter-button">
               All
             </button>
-            <button className="button filter-button text-xs font-light">Active</button>
+            <button className="button filter-button">Active</button>
             <button className="button filter-button">Completed</button>
           </div>
           <div>
-            <button className="button">Clear completed</button>
+            <TodoClearCompleted clearCompleted={props.clearCompleted}/>
           </div>
         </div>
         </>  
