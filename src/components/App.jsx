@@ -111,10 +111,25 @@ function App() {
     setTodos(updatedTodos);
   }
 
-
-
-
-
+  /**
+   * Filter the todos based on the given filter string.
+   * If the filter string is 'all', return all todos.
+   * If the filter string is 'active', return only the todos that are not completed.
+   * If the filter string is 'completed', return only the todos that are completed.
+   * @param {string} filter
+   */
+  function todosFiltered(filter) {
+    if (filter === 'all') {
+      // Return all todos
+      return todos;
+    } else if (filter === 'active') {
+      // Return only the todos that are not completed
+      return todos.filter(todo => !todo.isComplete);
+    } else if (filter === 'completed') {
+      // Return only the todos that are completed
+      return todos.filter(todo => todo.isComplete);
+    }
+  }
 
   return (
     <div className="todo-app-container">
@@ -134,6 +149,7 @@ function App() {
             remaining={remaining}
             clearCompleted={clearCompleted}
             completeAllTodos={completeAllTodos}
+            todosFiltered={todosFiltered}
             />
              : <NowtTodo/>}
       </div>

@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import TodoItemsRemaining from './TodoItemsRemaining';
 import TodoClearCompleted from './TodoClearCompleted';
 import CompleteAllTodos from './CompleteAllTodos';
+import TodoFilters from './TodoFilters';
 
 TodoList.PropTypes = {
     todos: PropTypes.array.isRequired,
+    todosFiltered:PropTypes.func.isRequired,
     completeToDo: PropTypes.func.isRequired,
     markAsEditing: PropTypes.func.isRequired,
     updateTodo: PropTypes.func.isRequired,
@@ -17,10 +19,11 @@ TodoList.PropTypes = {
 };
 
 function TodoList(props){
+    const [filter, setFilter] = useState('all');
     return (
         <>
         <ul className="todo-list">
-          {props.todos.map(todo => (
+          {props.todosFiltered(filter).map(todo => (
             <li className="todo-item-container" key={todo.id}>
               <div className="todo-item">
                 <input type="checkbox" onChange={()=>props.completeToDo(todo.id)}
@@ -75,11 +78,11 @@ function TodoList(props){
 
         <div className="other-buttons-container bg-gray-300 mt-8 p-4">
           <div className='flex space-x-1'>
-            <button className="button filter-button">
-              All
-            </button>
-            <button className="button filter-button">Active</button>
-            <button className="button filter-button">Completed</button>
+          <TodoFilters
+            todosFiltered={props.todosFiltered}
+            filter={filter}
+            setFilter={setFilter}
+          />
           </div>
           <div>
             <TodoClearCompleted clearCompleted={props.clearCompleted}/>
