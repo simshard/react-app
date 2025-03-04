@@ -125,8 +125,8 @@ h2 {
 
 .button:hover {
   border: 1px solid lightgray;
-  background: #5a6180;
-  color:#c0c0c0
+  background: #a2a3a3;
+  color:#f5f3f3
 }
 
 .filter-button {
@@ -135,7 +135,7 @@ h2 {
 }
 
 .filter-button-active {
-  border: 2px solid rgb(227, 154, 16);
+  border: 1px solid rgb(16, 72, 227);
 }
 
 .check-all-container {
