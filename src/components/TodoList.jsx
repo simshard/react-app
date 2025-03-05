@@ -4,6 +4,7 @@ import TodoItemsRemaining from './TodoItemsRemaining';
 import TodoClearCompleted from './TodoClearCompleted';
 import CompleteAllTodos from './CompleteAllTodos';
 import TodoFilters from './TodoFilters';
+import useToggle from '../hooks/useToggle';
 
 TodoList.PropTypes = {
     todos: PropTypes.array.isRequired,
@@ -19,7 +20,10 @@ TodoList.PropTypes = {
 };
 
 function TodoList(props){
-    const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState('all');
+  const [isOneVisible, setOneVisible] = useToggle(true);
+  const [twoVisible, setTwoVisible] = useState(true);
+
     return (
         <>
         <ul className="todo-list">
@@ -70,25 +74,32 @@ function TodoList(props){
           ))}
         </ul>
 
-        <div className="check-all-container mt-6 p-4">
+      <div className="togglescontainer flex space-x-2 mt-8 p-4">
+        <button className="button" onClick= {setOneVisible}>Features One toggle</button>
+        <button className="button" onClick={()=>setTwoVisible(prevTwoVisible=>!prevTwoVisible)}>Features Two toggle</button>
+      </div>
+    
+    {isOneVisible && (
+      <div className="check-all-container mt-6 p-4">
         <CompleteAllTodos completeAllTodos={props.completeAllTodos}/>
-
-          <TodoItemsRemaining remaining={props.remaining}/>
+        <TodoItemsRemaining remaining={props.remaining}/>
+      </div>
+    )}
+    {twoVisible && (
+      <div className="other-buttons-container bg-gray-300 mt-8 p-4">
+        <div className='flex space-x-1'>
+        <TodoFilters
+          todosFiltered={props.todosFiltered}
+          filter={filter}
+          setFilter={setFilter}
+        />
         </div>
-
-        <div className="other-buttons-container bg-gray-300 mt-8 p-4">
-          <div className='flex space-x-1'>
-          <TodoFilters
-            todosFiltered={props.todosFiltered}
-            filter={filter}
-            setFilter={setFilter}
-          />
-          </div>
-          <div>
-            <TodoClearCompleted clearCompleted={props.clearCompleted}/>
-          </div>
+        <div>
+          <TodoClearCompleted clearCompleted={props.clearCompleted}/>
         </div>
-        </>  
+      </div>
+      )}
+      </>  
     );
 }
 

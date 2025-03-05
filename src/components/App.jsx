@@ -5,6 +5,7 @@ import NowtTodo from './NowtTodo';
 import TodoForm from './TodoForm';
 import TodoList from './TodoList';
 import '../App.css';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 function App() {
 
@@ -29,7 +30,9 @@ function App() {
     },
   ]);
   const [idForToDo, setIdForToDo] = useState(4);
-  const [name,setName] = useState('');
+
+   // const [name,setName] = useState('');
+ const [name,setName] = useLocalStorage('name','');
   const nameInputEl = useRef(null);
 
 
@@ -137,8 +140,14 @@ function App() {
     }
   }
 
+  function handleNameInput(event) {
+    setName(event.target.value);
+    localStorage.setItem('name',JSON.stringify(event.target.value));
+  }
+
   useEffect(() => {
-    nameInputEl.current.focus()
+    nameInputEl.current.focus();
+    setName(JSON.parse(localStorage.getItem('name')) ?? '');
   },[]);
 
   return (
@@ -153,9 +162,9 @@ function App() {
                  className='todo-input'
                  placeholder='Enter your name'
                  value={name}
-                 onChange={event => setName(event.target.value)}
+                 onChange={handleNameInput}
                 />
-          <button onClick= {() => nameInputEl.current.focus()}>get ref</button>
+          <button onClick= {() => nameInputEl.current.focus()}>ref</button>
         </form>
         {name &&<p className="name-label mt-4 text-red-500">hello {name}</p>}
       </div>
