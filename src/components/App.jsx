@@ -1,5 +1,5 @@
 import React from 'react';
-import { useMemo,useEffect,useRef,useState } from 'react';
+import { useMemo,useEffect,useRef} from 'react';
 
 import NowtTodo from './NowtTodo';
 import TodoForm from './TodoForm';
@@ -8,37 +8,12 @@ import '../App.css';
 import useLocalStorage from '../hooks/useLocalStorage';
 
 function App() {
+const [todos, setTodos] = useLocalStorage('todos',[]);  
+const [idForToDo,setIdForToDo] = useLocalStorage('idForToDo',1);
+const [name,setName] = useLocalStorage('name','');
+const nameInputEl = useRef(null);
 
-  const [todos, setTodos] = useState([
-    {
-      id: 1,
-      title: 'React, Vue, Svelte, Alpine',
-      isComplete: false,
-      isEditing:false,
-    },
-    {
-      id: 2,
-      title: 'Perseverance furthers...',
-      isComplete: false,
-      isEditing:false,
-    },
-    {
-      id: 3,
-      title: 'Hello world is a starting point',
-      isComplete: false,
-      isEditing:false,
-    },
-  ]);
-  const [idForToDo, setIdForToDo] = useState(4);
-
-   // const [name,setName] = useState('');
- const [name,setName] = useLocalStorage('name','');
-  const nameInputEl = useRef(null);
-
-
-
-  function addTodo(todo) {
-    
+  function addTodo(todo) {  
     setTodos([...todos,
     {
       id: idForToDo,
@@ -142,12 +117,12 @@ function App() {
 
   function handleNameInput(event) {
     setName(event.target.value);
-    localStorage.setItem('name',JSON.stringify(event.target.value));
+   // localStorage.setItem('name',JSON.stringify(event.target.value));
   }
 
   useEffect(() => {
     nameInputEl.current.focus();
-    setName(JSON.parse(localStorage.getItem('name')) ?? '');
+    //setName(JSON.parse(localStorage.getItem('name')) ?? '');
   },[]);
 
   return (
