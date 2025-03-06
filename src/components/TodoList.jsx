@@ -1,41 +1,78 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState,useContext } from 'react';
 import TodoItemsRemaining from './TodoItemsRemaining';
 import TodoClearCompleted from './TodoClearCompleted';
 import CompleteAllTodos from './CompleteAllTodos';
 import TodoFilters from './TodoFilters';
 import useToggle from '../hooks/useToggle';
+import { TodosContext } from '../context/TodosContext';
 
-TodoList.PropTypes = {
-    todos: PropTypes.array.isRequired,
-    todosFiltered:PropTypes.func.isRequired,
-    completeToDo: PropTypes.func.isRequired,
-    markAsEditing: PropTypes.func.isRequired,
-    updateTodo: PropTypes.func.isRequired,
-    cancelEdit: PropTypes.func.isRequired,
-    deleteTodo: PropTypes.func.isRequired,
-    remaining: PropTypes.number.isRequired,
-    clearCompleted: PropTypes.func.isRequired,
-    completeAllTodos: PropTypes.func.isRequired,
-};
 
-function TodoList(props){
-  const [filter, setFilter] = useState('all');
+
+
+function TodoList(){
+  const { todos, setTodos,  todosFiltered } = useContext(TodosContext);
   const [isOneVisible, setOneVisible] = useToggle(true);
-  const [twoVisible, setTwoVisible] = useState(true);
+ const [twoVisible, setTwoVisible] = useState(true);
+
+    function completeToDo(id) {
+      const updatedTodos = todos.map(todo => ({
+        ...todo,
+        isComplete: todo.id === id ? !todo.isComplete : todo.isComplete,
+      }));
+      setTodos(updatedTodos);
+    }
+  
+  
+    function updateTodo(event, todoId) {
+      const updatedTodos = todos.map(todo =>
+        // Check if the current todo's ID matches the provided ID
+        todoId === todo.id
+          ? {
+              // Create a new todo object with all properties of the current todo
+              ...todo,
+              // Update the title to the trimmed value from the input event (if it's not empty)
+              title: event.target.value.trim() === '' ? todo.title : event.target.value.trim(),
+              isEditing: false
+            }
+          : 
+            todo
+      );
+      setTodos(updatedTodos);
+    }
+   
+  
+    function deleteToDo(id) {
+        setTodos([...todos].filter(todo => todo.id !== id));
+    }
+  
+    function markAsEditing(id) {
+      const updatedTodos = todos.map(todo => ({
+        ...todo,
+        isEditing: todo.id === id ? !todo.isEditing : todo.isEditing,
+      }));
+      setTodos(updatedTodos);
+    }
+  
+    function cancelEdit(event, id) {
+      const updatedTodos = todos.map(todo => ({
+        ...todo,
+        isEditing: todo.id !== id ? todo.isEditing : false,
+      }));
+      setTodos(updatedTodos);
+    }
 
     return (
         <>
         <ul className="todo-list">
-          {props.todosFiltered(filter).map(todo => (
+          {todosFiltered().map(todo => (
             <li className="todo-item-container" key={todo.id}>
               <div className="todo-item">
-                <input type="checkbox" onChange={()=>props.completeToDo(todo.id)}
+                <input type="checkbox" onChange={()=>completeToDo(todo.id)}
                  checked={todo.isComplete? true : false} />
                 
                 {!todo.isEditing ? (
                 <span
-                 onDoubleClick={()=>props.markAsEditing(todo.id)} 
+                 onDoubleClick={()=>markAsEditing(todo.id)} 
                 className={`todo-item-label ${todo.isComplete ? 'line-through' : ''}`}>
                   {todo.title}
                 </span>
@@ -44,18 +81,18 @@ function TodoList(props){
                     type="text"
                     className="todo-item-input bg-green-100/20"
                     defaultValue={todo.title}
-                    onBlur={event => props.updateTodo(event,todo.id)}
+                    onBlur={event => updateTodo(event,todo.id)}
                     // Handle keydown events: update todo on 'Enter', cancel edit on 'Escape'
                     onKeyDown={event =>
-                      event.key === 'Enter' ? (props.updateTodo(event, todo.id))
-                    : event.key === 'Escape' ? props.cancelEdit(event, todo.id) : null
+                      event.key === 'Enter' ? (updateTodo(event, todo.id))
+                    : event.key === 'Escape' ? cancelEdit(event, todo.id) : null
                     }
                     autoFocus                          
                      />
                   )}
 
               </div>
-              <button type='button' className="x-button" onClick={() => props.deleteToDo(todo.id)}>
+              <button type='button' className="x-button" onClick={() => deleteToDo(todo.id)}>
               <svg
                 className="x-button-icon"
                 fill="none"
@@ -81,21 +118,17 @@ function TodoList(props){
     
     {isOneVisible && (
       <div className="check-all-container mt-6 p-4">
-        <CompleteAllTodos completeAllTodos={props.completeAllTodos}/>
-        <TodoItemsRemaining remaining={props.remaining}/>
+        <CompleteAllTodos/>
+        <TodoItemsRemaining />
       </div>
     )}
     {twoVisible && (
       <div className="other-buttons-container bg-gray-300 mt-8 p-4">
         <div className='flex space-x-1'>
-        <TodoFilters
-          todosFiltered={props.todosFiltered}
-          filter={filter}
-          setFilter={setFilter}
-        />
+        <TodoFilters/>
         </div>
         <div>
-          <TodoClearCompleted clearCompleted={props.clearCompleted}/>
+          <TodoClearCompleted/>
         </div>
       </div>
       )}
