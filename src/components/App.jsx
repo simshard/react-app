@@ -6,6 +6,7 @@ import TodoList from './TodoList';
 import '../App.css';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { TodosContext } from '../context/TodosContext';
+import { CSSTransition, TransitionGroup,SwitchTransition } from 'react-transition-group';
 
 function App() {
 const [todos, setTodos] = useLocalStorage('todos',[]);  
@@ -13,6 +14,7 @@ const [idForToDo,setIdForToDo] = useLocalStorage('idForToDo',1);
 const [name,setName] = useLocalStorage('name','');
 const nameInputEl = useRef(null);
 const [filter, setFilter] = useState('all');
+const nodeRef = useRef(null);
 
 
   
@@ -59,7 +61,21 @@ const [filter, setFilter] = useState('all');
                 />
           <button onClick= {() => nameInputEl.current.focus()}>ref</button>
         </form>
-        {name &&<p className="name-label mt-4 text-red-500">hello {name}</p>}
+
+        <CSSTransition
+         nodeRef={nodeRef}
+         in={name.length > 0}
+         timeout={300}
+         classNames="slide-vertical"
+         unmountOnExit
+         >
+         <p className="name-label mt-4 text-red-500" ref={nodeRef}>Hello, {name}</p>
+         </CSSTransition>
+
+
+
+
+
       </div>
 
 
@@ -67,8 +83,22 @@ const [filter, setFilter] = useState('all');
         <div className='border-b border-gray-400'>
         <TodoForm />
         </div>
-    
-    {todos.length > 0 ? <TodoList/> : <NowtTodo/>}
+
+        <SwitchTransition mode="out-in">
+            <CSSTransition
+              nodeRef={nodeRef}
+              key={todos.length > 0}
+              timeout={300}
+              classNames="slide-vertical"
+              unmountOnExit
+            >
+         {todos.length > 0 ? <TodoList ref={nodeRef}/> : <NowtTodo ref={nodeRef}/>} 
+         </CSSTransition>
+        </SwitchTransition>
+
+
+         
+
       </div>
     </div>
    </TodosContext.Provider> 

@@ -223,6 +223,10 @@ nav ul li:not(:first-child) {
   transform: translateY(-20px);
 }
 
+
+
+
+
 .slide-horizontal-enter {
   opacity: 0;
   transform: translateX(20px);

@@ -1,10 +1,11 @@
-import React, { useState,useContext } from 'react';
+import React, { useState,useContext,useRef } from 'react';
 import TodoItemsRemaining from './TodoItemsRemaining';
 import TodoClearCompleted from './TodoClearCompleted';
 import CompleteAllTodos from './CompleteAllTodos';
 import TodoFilters from './TodoFilters';
 import useToggle from '../hooks/useToggle';
 import { TodosContext } from '../context/TodosContext';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 
 
@@ -12,7 +13,8 @@ import { TodosContext } from '../context/TodosContext';
 function TodoList(){
   const { todos, setTodos,  todosFiltered } = useContext(TodosContext);
   const [isOneVisible, setOneVisible] = useToggle(true);
- const [twoVisible, setTwoVisible] = useState(true);
+  const [isTwoVisible, setTwoVisible] = useState(true);
+  const nodeRef = useRef(null);
 
     function completeToDo(id) {
       const updatedTodos = todos.map(todo => ({
@@ -63,9 +65,15 @@ function TodoList(){
 
     return (
         <>
-        <ul className="todo-list">
+        <TransitionGroup component="ul" className="todo-list">
           {todosFiltered().map(todo => (
-            <li className="todo-item-container" key={todo.id}>
+            <CSSTransition
+              nodeRef={nodeRef}
+              key={todo.id}
+              timeout={300}
+              classNames="slide-horizontal"
+            >
+            <li className="todo-item-container" ref={nodeRef}>
               <div className="todo-item">
                 <input type="checkbox" onChange={()=>completeToDo(todo.id)}
                  checked={todo.isComplete? true : false} />
@@ -108,22 +116,39 @@ function TodoList(){
                 </svg>
               </button>
             </li>
+            </CSSTransition>
           ))}
-        </ul>
+        </TransitionGroup>
+
+
+
 
       <div className="togglescontainer flex space-x-2 mt-8 p-4">
         <button className="button" onClick= {setOneVisible}>Features One toggle</button>
         <button className="button" onClick={()=>setTwoVisible(prevTwoVisible=>!prevTwoVisible)}>Features Two toggle</button>
       </div>
     
-    {isOneVisible && (
-      <div className="check-all-container mt-6 p-4">
+    <CSSTransition
+          nodeRef={nodeRef}
+          in={isOneVisible}
+          timeout={300}
+          classNames="slide-vertical"
+          unmountOnExit
+          > 
+      <div className="check-all-container mt-6 p-4" ref={nodeRef}>
         <CompleteAllTodos/>
         <TodoItemsRemaining />
       </div>
-    )}
-    {twoVisible && (
-      <div className="other-buttons-container bg-gray-300 mt-8 p-4">
+    </CSSTransition>
+
+     <CSSTransition
+        nodeRef={nodeRef}
+        in={isTwoVisible}
+        timeout={300}
+        classNames="slide-vertical"
+        unmountOnExit
+      >
+      <div className="other-buttons-container bg-gray-300 mt-8 p-4" ref={nodeRef}>
         <div className='flex space-x-1'>
         <TodoFilters/>
         </div>
@@ -131,8 +156,8 @@ function TodoList(){
           <TodoClearCompleted/>
         </div>
       </div>
-      )}
-      </>  
+     </CSSTransition>
+</>  
     );
 }
 
