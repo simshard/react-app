@@ -197,6 +197,7 @@ nav ul li:not(:first-child) {
 
 .active {
   font-weight: bold;
+  text-decoration: underline
 }
 
 /* Transitions  */

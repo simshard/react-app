@@ -46,8 +46,8 @@ const nodeRef = useRef(null);
                           filter,
                           setFilter
                           }}> 
-    <div className="todo-app-container mb-12 ">
-      <div className="todo-app">
+   
+      <div className="container todo-app">
 
       <div className="name-container">
         <h2>What is your Name?</h2>
@@ -100,7 +100,7 @@ const nodeRef = useRef(null);
          
 
       </div>
-    </div>
+
    </TodosContext.Provider> 
   );
 }
