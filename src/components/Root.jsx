@@ -8,7 +8,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router";
 function Root () {
     return (
         <Router>
-        <div className="todo-app-container">
+        <div className="container todo-app" >
            <NavBar/>
            <div className="content">
             <Routes>

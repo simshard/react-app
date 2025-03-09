@@ -24,20 +24,18 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.todo-app-container {
-  min-height: 100vh;
-  background: #f3f4f6;
-}
 
-.container {
-  margin: auto;
+.container   {
+ /*   margin: auto; */
   padding-top: 24px;
   max-width: 48rem;
 }
 
 .todo-app {
+  min-width: 320px;
+  min-height: 100vh;
+  background: #f3f4f6;
   margin: auto;
-  margin-top: 30px;
   padding: 2rem;
   background: white;
   border-radius: 0.25rem;

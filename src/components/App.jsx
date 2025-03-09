@@ -47,7 +47,7 @@ const nodeRef = useRef(null);
                           setFilter
                           }}> 
    
-      <div className="container todo-app">
+      <div className="todo-app-home">
 
       <div className="name-container">
         <h2>What is your Name?</h2>
