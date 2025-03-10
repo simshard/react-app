@@ -26,13 +26,12 @@ body {
 
 
 .container   {
- /*   margin: auto; */
   padding-top: 24px;
-  max-width: 48rem;
+
 }
 
 .todo-app {
-  min-width: 320px;
+  width: 32rem;
   min-height: 100vh;
   background: #f3f4f6;
   margin: auto;
@@ -40,7 +39,7 @@ body {
   background: white;
   border-radius: 0.25rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  max-width: 32rem;
+  
   color: #374151;
 }
 
